@@ -10,12 +10,14 @@ jobs:
   anonymous-image-check:
     runs-on: ubuntu-latest
     steps:
-      - name: Check public GHCR image manifests without credentials
+      - uses: docker/setup-buildx-action@v3
+      - name: Check both GHCR images without registry login
         run: |
-          set -euo pipefail
+          errors=0
           for image in thenwise-video thenwise-audio; do
-            echo "Checking ghcr.io/tasver/${image}:latest anonymously"
+            echo "CHECK ghcr.io/tasver/${image}:latest"
             docker logout ghcr.io >/dev/null 2>&1 || true
-            docker manifest inspect "ghcr.io/tasver/${image}:latest" > /dev/null
-            echo "PUBLIC OK: ${image}"
+            docker buildx imagetools inspect "ghcr.io/tasver/${image}:latest" || errors=$((errors+1))
           done
+          echo "Images not anonymously accessible: $errors"
+          test "$errors" -eq 0

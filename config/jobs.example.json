@@ -1,0 +1,8 @@
+{
+  "jobs": [
+    {
+      "id": "H3_DEMO_001",
+      "template": "video_minimax_h3_i2v.json"
+    }
+  ]
+}

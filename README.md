@@ -1,1 +1,0 @@
-# thenwise-ai

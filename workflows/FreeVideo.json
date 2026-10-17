@@ -1,0 +1,35 @@
+{
+  "1": {
+    "inputs": {
+      "text": "<Picture 1>  The man looks directly into the camera and calmly speaks the line, \"Tonight, I want to tell you a story about love, loss, and regret.\" Natural lip movement, subtle breathing, slight head movement, occasional blinking, warm empathetic expression, fixed camera, realistic facial motion, no scene change.",
+      "width": 1344,
+      "height": 768,
+      "seconds": 6,
+      "seed": 5021494079134921,
+      "two_pass": false,
+      "base_steps": 12,
+      "refine_steps": 3,
+      "force_regenerate": false,
+      "preview": false,
+      "refine_from": "",
+      "video-preview": "",
+      "media": [
+        "2",
+        0
+      ]
+    },
+    "class_type": "FreeVideoGenerate",
+    "_meta": {
+      "title": "FreeVideo · Generate & Preview"
+    }
+  },
+  "2": {
+    "inputs": {
+      "assets": "[{\"file\":\"freevideo/83b5879a13b049e99d925785f9b05a35/HOST_OPEN.png\",\"role\":\"reference\",\"enabled\":true}]"
+    },
+    "class_type": "FreeVideoMedia",
+    "_meta": {
+      "title": "FreeVideo · Media"
+    }
+  }
+}

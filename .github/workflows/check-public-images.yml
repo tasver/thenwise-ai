@@ -1,0 +1,21 @@
+name: Verify public Docker image pulls
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/check-public-images.yml'
+permissions:
+  contents: read
+jobs:
+  anonymous-image-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check public GHCR image manifests without credentials
+        run: |
+          set -euo pipefail
+          for image in thenwise-video thenwise-audio; do
+            echo "Checking ghcr.io/tasver/${image}:latest anonymously"
+            docker logout ghcr.io >/dev/null 2>&1 || true
+            docker manifest inspect "ghcr.io/tasver/${image}:latest" > /dev/null
+            echo "PUBLIC OK: ${image}"
+          done

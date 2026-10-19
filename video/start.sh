@@ -18,5 +18,8 @@ YAML
 mkdir -p /opt/ComfyUI/user/default/workflows
 cp /opt/thenwise/workflows/LTX-2.5_I2V_Speed_Control_INT8_LOCAL_PRODUCTION.json \
   /opt/ComfyUI/user/default/workflows/THENWISE_LTX25_LOCAL_PRODUCTION.json
+# The original user's simple 50-node I2V workflow is the primary workflow.
+cp /opt/thenwise/workflows/workflow_ltx25.json \
+  /opt/ComfyUI/user/default/workflows/THENWISE_ORIGINAL_LTX25_API.json
 cd /opt/ComfyUI
 exec python main.py --listen 0.0.0.0 --port 8188 --input-directory /workspace/input --output-directory /workspace/output

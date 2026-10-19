@@ -1,0 +1,19 @@
+{
+  "jobs": [
+    {
+      "id": "H3_PROD_0001",
+      "workflow": "video_minimax_h3_i2v.json",
+      "patch": {
+        "114": {
+          "image": "UPLOAD_FIRST_FRAME.png"
+        },
+        "121": {
+          "image": "UPLOAD_REFERENCE_FRAME.png"
+        },
+        "105:104": {
+          "prompt": "A single controlled subtle movement; preserve subject, clothing, background, framing and light."
+        }
+      }
+    }
+  ]
+}

@@ -76,6 +76,13 @@
       "remote": "checkpoints/yue2_3b_int8_convrot.safetensors",
       "dest": "checkpoints/yue2_3b_int8_convrot.safetensors",
       "min_gib": 3
+    },
+    {
+      "group": "ltx",
+      "repo": "Lightricks/LTX-2.5-22b-LoRA-Slow-Motion-Control",
+      "remote": "ltx-2.5-22b-lora-slow-motion-control-1.0.safetensors",
+      "dest": "loras/ltx-2.5-22b-lora-slow-motion-control-1.0.safetensors",
+      "min_gib": 0.5
     }
   ]
 }

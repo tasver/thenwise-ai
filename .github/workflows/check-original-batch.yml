@@ -1,0 +1,52 @@
+name: Verify original THENWISE LTX batch (no GPU)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/ltx_runner_cloud.py'
+      - 'scripts/contabo_sftp.py'
+      - 'workflows/workflow_ltx25.json'
+      - '.github/workflows/check-original-batch.yml'
+permissions:
+  contents: read
+jobs:
+  offline-batch-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile and verify original workflow
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/ltx_runner_cloud.py scripts/contabo_sftp.py
+          python - <<'PY'
+          import json
+          w=json.load(open('workflows/workflow_ltx25.json'))
+          assert len(w)==50
+          required={'395':'LoadImage','398:376':'PrimitiveStringMultiline',
+                    '398:362':'PrimitiveInt','403':'ResolutionSelector','75':'SaveVideo'}
+          assert all(w[key]['class_type']==expected for key,expected in required.items())
+          assert not any('lora' in n['class_type'].lower() for n in w.values())
+          print('Original 50-node LTX workflow verified; NO LoRA')
+          PY
+      - name: Offline batch dry run (no ComfyUI or paid GPU)
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet requests
+          sudo mkdir -p /opt/thenwise/workflows
+          sudo cp workflows/workflow_ltx25.json /opt/thenwise/workflows/workflow_ltx25.json
+          export TW_PROJECTS_ROOT="$RUNNER_TEMP/projects"
+          mkdir -p "$TW_PROJECTS_ROOT/THENWISE_DEMO/images" "$TW_PROJECTS_ROOT/THENWISE_DEMO/ltx/prompts"
+          printf 'not-used-by-dry-run' > "$TW_PROJECTS_ROOT/THENWISE_DEMO/images/SC001.png"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          root=Path(os.environ["TW_PROJECTS_ROOT"])/"THENWISE_DEMO"/"ltx/prompts"
+          root.joinpath("ltx_prompts.json").write_text(json.dumps({"scenes":[{
+            "scene_id":"SC001","image":"SC001.png","duration":6,"mp":1.2,
+            "motion_prompt":"One subtle camera push, unchanged background","version":2
+          }]}))
+          PY
+          python scripts/ltx_runner_cloud.py THENWISE_DEMO --all --dry-run
